@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ls0314.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":"12a"},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta property="og:type" content="article">
+<meta property="og:title" content="mysql索引">
+<meta property="og:url" content="https://ls0314.github.io/2026/09/20/%E7%96%AF%E7%8B%82%E5%85%AB%E8%82%A1/Mysql/mysql%E7%B4%A2%E5%BC%95/index.html">
+<meta property="og:site_name" content="ls03Blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ls0314.github.io/2026/09/20/%E7%96%AF%E7%8B%82%E5%85%AB%E8%82%A1/Mysql/mysql%E7%B4%A2%E5%BC%95/winter-aespa-hot-mess-4k-wallpaper-uhdpaper.com-152@0@k.jpg">
+<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/mysql/%E7%B4%A2%E5%BC%95/%E7%B4%A2%E5%BC%95%E5%88%86%E7%B1%BB.drawio.png">
+<meta property="og:image" content="https://ls0314.github.io/2026/09/20/%E7%96%AF%E7%8B%82%E5%85%AB%E8%82%A1/Mysql/mysql%E7%B4%A2%E5%BC%95/btree.drawio.png">
+<meta property="og:image" content="https://ls0314.github.io/2026/09/20/%E7%96%AF%E7%8B%82%E5%85%AB%E8%82%A1/Mysql/mysql%E7%B4%A2%E5%BC%95/COMPACT.drawio.png">
+<meta property="article:published_time" content="2026-09-20T09:38:17.000Z">
+<meta property="article:modified_time" content="2026-09-21T08:48:10.450Z">
+<meta property="article:author" content="ls03">
+<meta property="article:tag" content="mysql, 八股">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ls0314.github.io/2026/09/20/%E7%96%AF%E7%8B%82%E5%85%AB%E8%82%A1/Mysql/mysql%E7%B4%A2%E5%BC%95/winter-aespa-hot-mess-4k-wallpaper-uhdpaper.com-152@0@k.jpg">
+
+
+<link rel="canonical" href="https://ls0314.github.io/2026/09/20/%E7%96%AF%E7%8B%82%E5%85%AB%E8%82%A1/Mysql/mysql%E7%B4%A2%E5%BC%95/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ls0314.github.io/2026/09/20/%E7%96%AF%E7%8B%82%E5%85%AB%E8%82%A1/Mysql/mysql%E7%B4%A2%E5%BC%95/","path":"2026/09/20/疯狂八股/Mysql/mysql索引/","title":"mysql索引"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>mysql索引 | ls03Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/bookmark.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"per_page":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">ls03Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">将上白登雪满山</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%B4%A2%E5%BC%95"><span class="nav-number">1.</span> <span class="nav-text">1.什么是索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%88%86%E7%B1%BB"><span class="nav-number">2.</span> <span class="nav-text">2.索引分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">2.1.</span> <span class="nav-text">2.1数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%A9%E7%90%86%E5%AD%98%E5%82%A8"><span class="nav-number">2.2.</span> <span class="nav-text">2.2物理存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E6%AE%B5%E7%89%B9%E6%80%A7"><span class="nav-number">2.3.</span> <span class="nav-text">2.3字段特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E6%AE%B5%E4%B8%AA%E6%95%B0"><span class="nav-number">2.4.</span> <span class="nav-text">2.4字段个数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%B4%A2%E5%BC%95%E7%9A%84%E6%97%B6%E6%9C%BA"><span class="nav-number">3.</span> <span class="nav-text">3.创建索引的时机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%82%E5%90%88%E5%88%9B%E5%BB%BA%E7%B4%A2%E5%BC%95"><span class="nav-number">3.1.</span> <span class="nav-text">适合创建索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E9%9C%80%E8%A6%81%E7%B4%A2%E5%BC%95"><span class="nav-number">3.2.</span> <span class="nav-text">不需要索引</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">4.索引的优化方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%BC%80%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96"><span class="nav-number">4.1.</span> <span class="nav-text">4.1前缀索引优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A6%86%E7%9B%96%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96"><span class="nav-number">4.2.</span> <span class="nav-text">4.2覆盖索引优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E9%94%AE%E7%B4%A2%E5%BC%95%E6%9C%80%E5%A5%BD%E6%98%AF%E8%87%AA%E5%A2%9E"><span class="nav-number">4.3.</span> <span class="nav-text">4.3主键索引最好是自增</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E6%9C%80%E5%A5%BD%E8%AE%BE%E7%BD%AE%E4%B8%BAnot-null"><span class="nav-number">4.4.</span> <span class="nav-text">4.4 索引最好设置为NOT NULL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B2%E6%AD%A2%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88"><span class="nav-number">4.5.</span> <span class="nav-text">4.5 防止索引失效</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="nav-number">5.</span> <span class="nav-text">常见面试题</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ls03"
+      src="/images/winter-aespa-armageddon-my-power-phone-wallpaper-4k-uhdpaper.com-524@0@j.jpg">
+  <p class="site-author-name" itemprop="name">ls03</p>
+  <div class="site-description" itemprop="description">生如逆旅，一苇以航</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ls0314.github.io/2026/09/20/%E7%96%AF%E7%8B%82%E5%85%AB%E8%82%A1/Mysql/mysql%E7%B4%A2%E5%BC%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/winter-aespa-armageddon-my-power-phone-wallpaper-4k-uhdpaper.com-524@0@j.jpg">
+      <meta itemprop="name" content="ls03">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ls03Blog">
+      <meta itemprop="description" content="生如逆旅，一苇以航">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="mysql索引 | ls03Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          mysql索引
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-09-20 17:38:17" itemprop="dateCreated datePublished" datetime="2026-09-20T17:38:17+08:00">2026-09-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-09-21 16:48:10" itemprop="dateModified" datetime="2026-09-21T16:48:10+08:00">2026-09-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%96%AF%E7%8B%82%E5%85%AB%E8%82%A1/" itemprop="url" rel="index"><span itemprop="name">疯狂八股</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%96%AF%E7%8B%82%E5%85%AB%E8%82%A1/Mysql/" itemprop="url" rel="index"><span itemprop="name">Mysql</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><img src="/2026/09/20/疯狂八股/Mysql/mysql索引/winter-aespa-hot-mess-4k-wallpaper-uhdpaper.com-152@0@k.jpg"></p>
+<span id="more"></span>
+<h2 id="什么是索引">1.什么是索引</h2>
+<p>索引就像是书中的目录，可以通过页号来找到对应的章节。同时通过索引的名字也可以理解其含义，在go/c++等语言中数组的下标就其对应的索引。所以索引的定义就是帮数据库的存储引擎快速获取数据的一种数据结构(就像数据的索引是线性结构一样)。</p>
+<p>至于存储引擎就是一系列有关数据库操作函数的集合，让使用者可以通过其暴露的接口方便的进行数据库操作。在Mysql中存储引擎有InnoDB，MyISAM，Memory，其中InnoDB是MySql现在默认的存储引擎。</p>
+<h2 id="索引分类">2.索引分类</h2>
+<p>索引可以按照四个角度来分类，分别是数据结构、物理存储、字段特性、字段个数，
+下面将从这个四个方面展开了解</p>
+<h3 id="数据结构">2.1数据结构</h3>
+<p>按数据结构的角度分类，MySQL中常见索引有B+Tree索引，Hash索引，Full-Text索引。每一种存储引擎支持的索引类型不一定相同，下图为MySQL的常见存储引擎支持的索引类型</p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/mysql/%E7%B4%A2%E5%BC%95/%E7%B4%A2%E5%BC%95%E5%88%86%E7%B1%BB.drawio.png"></p>
+<ul>
+<li><p>B+Tree索引</p>
+<p>B+Tree索引是MySQL中最常见的索引类型，在创建的主键索引和二级索引默认使用的都是B+Tree索引，其依赖数据结构B+Tree是一种多路平衡查找树（假设为n阶树），每一个非叶子节点只存索引key，不保存真实数据，所有数据都保存在叶子节点，而且所有的节点首尾相连构成一个双向有序列表。每个非叶子节点保存最多n个索引元素，索引元素间的间隙指向对应的叶子节点或下一个节点的间隙。</p>
+<figure>
+<img src="/2026/09/20/疯狂八股/Mysql/mysql索引/btree.drawio.png" alt="B+Tree">
+<figcaption aria-hidden="true">B+Tree</figcaption>
+</figure>
+<p>大致结构如上图所示，但注意上图表示的是聚簇索引（主键索引），其叶子节点存储了表中一行的所有元素，若为二级索引，对应的叶子节点存储的只有索引的字段信息和主键值，想要查询在表内但未索引的字段只能根据主键信息回表查询。</p></li>
+<li><p>Hash索引</p>
+<p>Hash索引是用哈希表实现的索引，对索引字段计算hash值后映射到哈希桶（桶内存hash值，索引信息和行指针），使用拉链法处理哈希冲突。由于其hash表的特性导致只能进行等值查询，没办法进行范围查询和模糊查询，使得InnoDB直接就不支持Hash索引。大多数场景也不会用到，故就不再详细了解。</p></li>
+<li><p>Full-Text索引</p>
+<p>Full-Text索引底层原理为倒排索引，这点与ES相似，专门解决大文本关键词检索，倒排索引具体来说就是将索引从原来的ID-&gt;数据内容
+变为数据关键词-&gt;ID，通过这种方式优化B+Tree模糊查询效率问题，但由于其分词能力弱，以及能力远弱于ES，导致其生态位基本被ES取代使用的场景也不多，故也不详细了解。</p>
+<p>综上，在大多数情况下索引的底层基本都是B+Tree，所以仔细了解B+Tree的特性可以更好的帮助我们更好的理解索引的特性，为什么在某些情况下会索引失效，为什么索引要如此优化。</p></li>
+</ul>
+<h3 id="物理存储">2.2物理存储</h3>
+<p>从物理存储的角度来看，索引主要分为聚簇（主键）索引，和二级索引。这二者的核心区别，在梳理按数据结构分类时也已经提到：</p>
+<ul>
+<li>主键索引：主键所以的B+Tree的叶子节点里存储主键及对应的行数据信息即存储的为实际数据。</li>
+<li>二级索引：二级索引的B+Tree的叶子节点里只存储主键值和被索引的字段信息，等于存储是一个索引</li>
+</ul>
+<p>这就是引出了一个概念，当我们使用二级索引想要查询某行元素时，由于二级索引中只有主键值和被索引的信息，所以数据库还要根据主键值再查一遍数据库才能拿到完整的行。这个过程就被叫做回表操作，由于触发回表就代表要多执行一次数据库查询，这十分影响效率，所以在设计索引时要注意尽可能减少触发回表操作。</p>
+<h3 id="字段特性">2.3字段特性</h3>
+<p>从字段特性角度，索引分为，主键索引，唯一索引，普通索引，前缀索引，其实这些就都是索引对字段的约束相比于前面的要好理解些</p>
+<ul>
+<li><p>主键索引</p>
+<p>主键索引也就是聚簇索引，具体特性已经了解过了就不在提及，唯一需要注意的是主键索引不支持空值且天然是唯一索引</p></li>
+<li><p>唯一索引</p>
+<p>顾名思义，唯一索引就是指被索引的字段每行的值必须唯一，唯一索引支持空值</p></li>
+<li><p>普通索引</p>
+<p>普通索引就是普通的二级索引，不是主键，可以非唯一</p></li>
+<li><p>前缀索引</p>
+<p>这个是唯一一个需要理解一下的新概念，设想一下要某个被索引的列字段内都是长度为400-500或更长的字符串，那在查询比对的时候效率肯定不如长度为10的字符串，而且更长的长度也会占用更多的存储空间，所以为了解决这个问题，我们截取字符串的前几个字符来建立索引，即在对应的B+Tree的叶子节点存储的就是主键值和被截取后的前缀字符串。使用了更小的空间创建了二级索引。但前缀索引必须回表校验完整字符串</p></li>
+</ul>
+<h3 id="字段个数">2.4字段个数</h3>
+<p>从字段个数看，索引有单列索引，和联合索引，建立在单列上的就是单列索引，建立在多个字段上的就是联合索引。</p>
+<ul>
+<li><p>联合索引</p>
+<p>虽然联合索引的定义就是简单的一句话：通过将多个字段组合成一个索引，就是联合索引。但在使用的过程中还是有一些需要注意的地方。</p>
+<p>联合索引的B+Tree的叶子节点存储的是主键值和被索引的多个字段的信息，这是当查询多个字段信息时不回表的基础。而且联合索引遵循最左匹配原则，即叶子节点中的元素按建立索引时从左到右的顺序以此排序，这就意味着在使用联合索引查询时若为传入最左侧字段索引就会失效。</p>
+<p>联合查询在进行范围查询时会存在一个索引失效的场景，因为联合索引是按照从左到右的排序优先级进行排序的导致其数据特征为只有最左侧字段全局有序，剩下的都是全局无序，局部有序，所以当出现&gt;或&lt;的符号时当前的字段还是走索引但右侧的字段由于其全局无序性就不在走索引了。有一个特殊的是&lt;=或&gt;=会被拆分为=和&lt;或&gt;，=的部分可以看出是一个定值查询，不会出现范围截断的情况所以还是全部走索引，剩下的&gt;&lt;的部分右侧字段就不在走索引。</p></li>
+</ul>
+<h2 id="创建索引的时机">3.创建索引的时机</h2>
+<p>索引可以提高查询/搜索的效率，那是不是索引越多越好呢，答案显然是否定的，从前面了解到的索引相关内容知道索引的底层数据结构是一颗B+Tree，那就意味着每新键一个索引就等于创建一颗B+Tree，若无限制的创建索引这会大大浪费存储空间，而且创建索引和维护索引也需要时间，当表执行增删改操作时，B+Tree为了维护其索引的有序性需要进行动态维护，会降低效率。总结一下就是
+索引不能无限制的创建，需要结合实际场景来使用。</p>
+<h3 id="适合创建索引">适合创建索引</h3>
+<ul>
+<li>字段具有唯一性，商品编码，幂等键等</li>
+<li>经常需要WHERE查询的字段，若是查询条件为多个字段就需要创建联合索引</li>
+<li>经常用于GROU BY和ORDER
+BY的字段，建立索引在查询的时候就不需要再进行排序了，提升效率</li>
+</ul>
+<h3 id="不需要索引">不需要索引</h3>
+<ul>
+<li>没有区别度的字段，比如性别</li>
+<li>不经常WHERE或用于GROU BY和ORDER
+BY的字段，不需要快速定位就没必要创建索引</li>
+<li>表数据太少</li>
+<li>经常更新的字段，为了维护B+Tree的有序性降低的效率可能大于建立索引后查询提升的效率</li>
+</ul>
+<h2 id="索引的优化方法">4.索引的优化方法</h2>
+<h3 id="前缀索引优化">4.1前缀索引优化</h3>
+<p>这个方法或索引其实再前面索引分类处已经介绍过了，核心思路就是截断索引字段节省存储空间，通过一次回表来保证查询的正确性，典型的时间换空间。但前缀索引也有一些局限性，比如ORDER
+BY 无法使用前缀索引，前缀索引也无法作为覆盖索引。</p>
+<h3 id="覆盖索引优化">4.2覆盖索引优化</h3>
+<p>覆盖索引优化核心就为了解决二级索引的回表问题，因为当使用二级索引查询某个不在二级索引内的字段时，只能通过主键回表查询所以为了解决这个问题，最好就是将需要查询的字段一起放入联合索引内，减少数据回表操作。索引覆盖索引优化的好处就是减少索引的回表问题，减少了大量的I/O操作。</p>
+<h3 id="主键索引最好是自增">4.3主键索引最好是自增</h3>
+<p>在日常开发中设计主键常用的都是自增类型，为什么这样做呢。其实在作者刚开始学习开发完整的后端系统设计数据库主键时觉得自增主键看起来有点low啊，果断改了设计方案，又问ai又查资料费了好大劲给改成了看起来高大上的uuid。跑通那一刻多少还是有点成就感的。但被monter审了一下代码后，立刻一顿拷打，为什么不用自增？选uuid的理由是啥？没想过uuid占用的空间要远大于自增吗？只能认错重构。说远了但这个小故事还是引出了为什么要使用自增的原因</p>
+<ul>
+<li>当使用自增主键时，新增的每一条数据都是追加操作，自增天然有序，有很高的插入效率，而非自增就需要先查询在插入了等于多了一步B+Tree的动态维护过程。而其还会导致页分裂的情况，造成大量的内存碎片</li>
+<li>主键的长度不要过长，主键长度越短二级索引的叶子节点占用的存储相对来说就会越小。(显然uuid并没有这个优势)</li>
+</ul>
+<h3 id="索引最好设置为not-null">4.4 索引最好设置为NOT NULL</h3>
+<p>索引最好有设置一个非空的约束</p>
+<ul>
+<li><p>索引列存在NULL值会导致优化器进行额外的操作，更难以优化。</p></li>
+<li><p>NULL虽然是一个没有意义的值但会占用物理空间，因为在InnoDB里若存在允许为NULL的字段，在行格式里会占用至少1字节的空间来存储NULL值列表（逆序存储某个列是否可以为空的位图，例如若最后一位为1代表第一列可以是空值）</p>
+<figure>
+<img src="/2026/09/20/疯狂八股/Mysql/mysql索引/COMPACT.drawio.png" alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure></li>
+</ul>
+<h3 id="防止索引失效">4.5 防止索引失效</h3>
+<p>使用索引会优化查询效率，但不意味着索引不会失效。有很多种情况都会导致索引失效</p>
+<ol type="1">
+<li>索引字段使用函数调用等操作，例如四则运算，类型转化</li>
+<li>联合索引未遵循最左匹配原则或触发范围截断</li>
+<li>对索引字段使用模糊查询(非前缀通配)</li>
+<li>对索引字段使用OR</li>
+<li>优化器判断不走索引更快，例如返回大量数据，或索引字段区分度过低</li>
+</ol>
+<h2 id="常见面试题">常见面试题</h2>
+<ol type="1">
+<li>为什么Mysql InnoDB选择B+Tree作为索引的数据结构?</li>
+<li>常见的索引失效场景</li>
+<li>聚簇索引和非聚簇索引的区别</li>
+<li>MySQL的深分页问题</li>
+<li>B+树特性</li>
+<li>索引优化讲一下</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/mysql-%E5%85%AB%E8%82%A1/" rel="tag"># mysql, 八股</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/09/20/go%E8%AF%AD%E8%A8%80%E5%8E%9F%E7%90%86/GMP/GMP%E6%A8%A1%E5%9E%8B/" rel="prev" title="GMP模型原理理解">
+                  <i class="fa fa-angle-left"></i> GMP模型原理理解
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">ls03</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">28k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">51 分钟</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("09/05/2025 10:00:00"); //此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒.";
+    }
+setInterval("createtime()",250);
+</script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
