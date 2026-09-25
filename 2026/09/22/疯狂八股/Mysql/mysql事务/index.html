@@ -28,7 +28,7 @@
 <meta property="og:image" content="https://ls0314.github.io/2026/09/22/%E7%96%AF%E7%8B%82%E5%85%AB%E8%82%A1/Mysql/mysql%E4%BA%8B%E5%8A%A1/checkpoint.png">
 <meta property="og:image" content="https://ls0314.github.io/2026/09/22/%E7%96%AF%E7%8B%82%E5%85%AB%E8%82%A1/Mysql/mysql%E4%BA%8B%E5%8A%A1/%E7%89%88%E6%9C%AC%E9%93%BE.png">
 <meta property="article:published_time" content="2026-09-22T06:34:00.000Z">
-<meta property="article:modified_time" content="2026-09-24T12:25:18.594Z">
+<meta property="article:modified_time" content="2026-09-24T14:22:10.483Z">
 <meta property="article:author" content="ls03">
 <meta property="article:tag" content="八股, Mysql">
 <meta name="twitter:card" content="summary">
@@ -294,7 +294,7 @@ mjx-container[display="true"] + br {
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -367,7 +367,7 @@ mjx-container[display="true"] + br {
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-09-24 20:25:18" itemprop="dateModified" datetime="2026-09-24T20:25:18+08:00">2026-09-24</time>
+      <time title="修改时间：2026-09-24 22:22:10" itemprop="dateModified" datetime="2026-09-24T22:22:10+08:00">2026-09-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -531,7 +531,7 @@ lock，本质是行锁+间隙锁，锁住的是目标索引记录+它左边的�
 <p>看上述锁的定义可以知道，索引间的间隙是维持锁的关键，这个间隙是在上锁的那一刻将索引排序后每两个相邻的索引间就是一个间隙。比如索引有1
 3
 5那间隙就是(-∞,1]<code>、</code>(1,3]<code>、</code>(3,5]<code>、</code>(5,+∞)。还有一点注意的是临键锁不是任何时候都加的，当出现主键等值查询且这条记录真实存在只加行锁，等值查询，索引找不到匹配记录，只加间隙锁。</p>
-<p>快照读和当前读解决幻读的方式是不一样的所以适用范围也不一样，针对快照读的事务id那套东西并不太适用于当前读的场景，控制当前读是否可主要就是锁机制。简单来说当事务A对某行事务执行操作时就会根据类型对索引加上对应的锁（锁是加载索引上，若不走索引锁就会退化成表锁），这把锁会阻碍其他事务对当前数据或当前数据的索引间隙执行写操作，知道当前事务提交对锁进行释放。</p>
+<p>快照读和当前读解决幻读的方式是不一样的所以适用范围也不一样，针对快照读的事务id那套东西并不太适用于当前读的场景，控制当前读是否可主要就是锁机制。简单来说当事务A对某行事务执行操作时就会根据类型对索引加上对应的锁（锁是加载在索引上，若不走索引锁就会退化成表锁），这把锁会阻碍其他事务对当前数据或当前数据的索引间隙执行写操作，知道当前事务提交对锁进行释放。</p>
 <p>现在我们再回到MVCC无法解决的场景。当事务A启动后先执行id &gt;
 1的带锁查询操作，间隙锁锁住（1，+∞），此时事务B想要向事务A查询的范围内插入数据因为事务A尚未提交，事务B就会因为间隙锁而陷入阻塞状态，直到事务A提交后才会完成这次插入。但此时事务A早已提交就不会有幻读的风险。</p>
 
@@ -555,6 +555,9 @@ lock，本质是行锁+间隙锁，锁住的是目标索引记录+它左边的�
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2026/09/24/%E7%96%AF%E7%8B%82%E5%85%AB%E8%82%A1/Mysql/MySQL%E9%94%81%E6%9C%BA%E5%88%B6/" rel="next" title="MySQL锁机制">
+                  MySQL锁机制 <i class="fa fa-angle-right"></i>
+                </a>
             </div>
           </div>
     </footer>
@@ -585,13 +588,13 @@ lock，本质是行锁+间隙锁，锁住的是目标索引记录+它左边的�
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">33k</span>
+    <span title="站点总字数">36k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:01</span>
+    <span title="站点阅读时长">1:05</span>
   </span>
 </div>
 <div class="busuanzi-count">
