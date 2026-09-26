@@ -872,7 +872,7 @@ BY 无法使用前缀索引，前缀索引也无法作为覆盖索引。</p>
     <title>Mysql内存机制</title>
     <url>/2026/09/26/%E7%96%AF%E7%8B%82%E5%85%AB%E8%82%A1/Mysql/Mysql%E5%86%85%E5%AD%98%E6%9C%BA%E5%88%B6/</url>
     <content><![CDATA[<p><img src="/2026/09/26/疯狂八股/Mysql/Mysql内存机制/19683679796745088.jpeg"></p>
-<!---more--->
+<span id="more"></span>
 <p>MySQL的内存常指的就是Buffer Pool，在之前了解redo
 log的持久化过程时，有提到过redo
 log会根据参数的来决定当前的redo记录是先暂存在Buffer Pool里redo buffer
